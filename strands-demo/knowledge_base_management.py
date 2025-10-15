@@ -12,7 +12,7 @@ def create_knowledge_base_with_s3_vectors(topic_base: str, files: list[(str,str)
     kb_name = topic + '-kb'
     vector_bucket_name = topic + '-vectors' 
     role_name = f"{topic}-knowledge-base-access-role"
-    vector_index_name = f"{topic}-knowledge-base-default-index"
+    vector_index_name = f"{topic}-knowledge-base-index"
     # Initialize clients
     bedrock_agent = boto3.client('bedrock-agent', region_name=region)
     s3 = boto3.client('s3', region_name=region)
@@ -47,7 +47,7 @@ def update_knowledge_base_with_s3_vectors(topic_base: str, files: list[(str,str)
     kb_name = topic + '-kb'
     vector_bucket_name = topic + '-vectors' 
     role_name = f"{topic}-knowledge-base-access-role"
-    vector_index_name = f"{topic}-knowledge-base-default-index"
+    vector_index_name = f"{topic}-knowledge-base-index"
     # Initialize clients
     bedrock_agent = boto3.client('bedrock-agent', region_name=region)
     s3 = boto3.client('s3', region_name=region)
@@ -435,3 +435,4 @@ def update_data_source(bedrock_agent, kb_name, bucket_name, kb_id):
             print(f"❓ Unexpected status: {status}")
             time.sleep(10)
     return kb_id
+
