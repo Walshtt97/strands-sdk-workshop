@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  strands-workshop:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: strands-sdk-workshop
+    ports:
+      - "8888:8888"
+    volumes:
+      # Mount the workshop directories for live editing
+      - ./strands-agent-workshop:/workspace/strands-agent-workshop
+      - ./strands-demo:/workspace/strands-demo
+      - ./images:/workspace/images
+      # Uncomment the next line if you want to use local AWS credentials
+      # - ~/.aws:/home/workshop/.aws:ro
+    environment:
+      # AWS Configuration - these will be read from .env file if it exists
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-}
+      - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN:-}
+      - AWS_DEFAULT_REGION=${AWS_REGION:-us-east-1}
+      # Jupyter Configuration
+      - JUPYTER_ENABLE_LAB=yes
+      - JUPYTER_TOKEN=${JUPYTER_TOKEN:-}
+    working_dir: /workspace
+    networks:
+      - strands-network
+
+networks:
+  strands-network:
+    driver: bridge
+
+# Optional: Add a volume for persistent data
+volumes:
+  workshop-data:
+    driver: local
