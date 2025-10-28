@@ -1,0 +1,14 @@
+strands-agents>=1.0.0
+strands-agents-tools>=0.2.0
+strands-agents-builder>=0.1.7
+faiss-cpu==1.11.0
+openai==1.99.3
+aiohttp==3.12.15
+boto3
+bedrock-agentcore==0.1.1
+bedrock-agentcore-starter-toolkit==0.1.5
+requests>=2.31.0
+opensearch-py
+strands-agents[a2a]
+uvicorn
+fastapi
