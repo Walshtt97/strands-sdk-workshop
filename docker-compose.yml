@@ -1,18 +1,14 @@
-version: '3.8'
-
 services:
   strands-workshop:
     build:
       context: .
-      dockerfile: Dockerfile
-    container_name: strands-sdk-workshop
+      dockerfile: strands-agent-workshop/Dockerfile
+    container_name: jupyter-workshop
     ports:
       - "8888:8888"
     volumes:
       # Mount the workshop directories for live editing
-      - ./strands-agent-workshop:/workspace/strands-agent-workshop
-      - ./strands-demo:/workspace/strands-demo
-      - ./images:/workspace/images
+      - ./strands-agent-workshop:/workspace
       # Uncomment the next line if you want to use local AWS credentials
       # - ~/.aws:/home/workshop/.aws:ro
     environment:
@@ -26,6 +22,31 @@ services:
       - JUPYTER_ENABLE_LAB=yes
       - JUPYTER_TOKEN=${JUPYTER_TOKEN:-}
     working_dir: /workspace
+    networks:
+      - strands-network
+
+  a2a-service:
+    build:
+      context: .
+      dockerfile: A2AServiceExample/Dockerfile
+    container_name: strands-a2a-service
+    ports:
+      - "9000:9000"
+    environment:
+      # AWS Configuration
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-}
+      - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN:-}
+      - AWS_DEFAULT_REGION=${AWS_REGION:-us-east-1}
+      # Bedrock Configuration
+      - BEDROCK_MODEL_ID=${BEDROCK_MODEL_ID:-us.anthropic.claude-sonnet-4-20250514-v1:0}
+      - USER_NAME=${USER_NAME:-workshop}
+      # Bypass tool consent for automated execution
+      - BYPASS_TOOL_CONSENT=true
+    volumes:
+      # Mount for live code editing during development
+      - ./A2AServiceExample/A2ATool.py:/workspace/A2ATool.py
     networks:
       - strands-network
 
