@@ -54,11 +54,12 @@ RUN pip install \
     boto3 \
     botocore
 
-# Copy the entire project
+# Copy the workshop files
 COPY ./strands-agent-workshop/ .
-COPY ./strands-agent-workshop/images/ ./images/
 
 COPY ./utils/ .
+COPY ./strands-agent-workshop/images/ ./images/
+
 # Install Python dependencies
 RUN pip install -r requirements.txt
 

@@ -3,42 +3,42 @@ services:
     build:
       context: .
       dockerfile: strands-agent-workshop/Dockerfile
-    container_name: jupyter-workshop
+    container_name: strands-workshop
     ports:
       - "8888:8888"
     volumes:
       # Mount the workshop directories for live editing
-      - ./strands-agent-workshop:/workspace
+      - ./strands-agent-workshop/.ipynb_checkpoints:/workspace/.ipynb_checkpoints
       # Uncomment the next line if you want to use local AWS credentials
       # - ~/.aws:/home/workshop/.aws:ro
+
     environment:
       # AWS Configuration - these will be read from .env file if it exists
-      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - AWS_REGION=us-east-1
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-}
       - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN:-}
-      - AWS_DEFAULT_REGION=${AWS_REGION:-us-east-1}
+      - AWS_DEFAULT_REGION=us-east-1
       # Jupyter Configuration
       - JUPYTER_ENABLE_LAB=yes
       - JUPYTER_TOKEN=${JUPYTER_TOKEN:-}
-    working_dir: /workspace
     networks:
       - strands-network
 
-  a2a-service:
+  web-scraping-agent:
     build:
       context: .
-      dockerfile: A2AServiceExample/Dockerfile
-    container_name: strands-a2a-service
+      dockerfile: web-scraping-agent/Dockerfile
+    container_name: web-scraping-agent
     ports:
       - "9000:9000"
     environment:
       # AWS Configuration
-      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - AWS_REGION=us-east-1
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-}
       - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN:-}
-      - AWS_DEFAULT_REGION=${AWS_REGION:-us-east-1}
+      - AWS_DEFAULT_REGION=us-east-1
       # Bedrock Configuration
       - BEDROCK_MODEL_ID=${BEDROCK_MODEL_ID:-us.anthropic.claude-sonnet-4-20250514-v1:0}
       - USER_NAME=${USER_NAME:-workshop}
@@ -46,7 +46,7 @@ services:
       - BYPASS_TOOL_CONSENT=true
     volumes:
       # Mount for live code editing during development
-      - ./A2AServiceExample/A2ATool.py:/workspace/A2ATool.py
+      - ./web-scraping-agent/web_scraping_agent.py:/workspace/web_scraping_agent.py
     networks:
       - strands-network
 

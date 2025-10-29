@@ -50,7 +50,7 @@ RUN pip install \
     botocore
 
 # Copy the entire project
-COPY ./A2AServiceExample/ .
+COPY ./web-scraping-agent/ .
 
 COPY ./utils/ .
 # Install Python dependencies
@@ -69,4 +69,4 @@ USER workshop
 EXPOSE 9000
 
 # Set the default command to start the A2A server
-ENTRYPOINT ["python", "A2ATool.py"]
+ENTRYPOINT ["python", "web_scraping_agent.py"]
